@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 
 
 """
+ -> ZDA SA ZE TOTO SA NEBUDE DAT POUZIT KVOLI SHORTEST PATH
  -> Node Betweenness Centrality
  -> identify and visualize players who act as key playmakers in the passing network
 """

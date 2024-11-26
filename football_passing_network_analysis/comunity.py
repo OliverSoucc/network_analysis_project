@@ -8,16 +8,18 @@ import numpy as np
 
 """
  -> Community Detection (Identifying Subgroups in Teams)
+ -> Modularity (evaluation of Community detection)
  -> we used Louvain algorithm
 """
+
 
 # Set a fixed seed for reproducibility
 random.seed(42)
 np.random.seed(42)
 
 
-# Define a function to detect communities within the passing network
-def detect_communities(team_file, title):
+# Define a function to detect communities and calculate modularity
+def detect_communities_with_modularity(team_file, title):
     # Load the team's passing data
     team_df = pd.read_csv(team_file)
 
@@ -40,6 +42,10 @@ def detect_communities(team_file, title):
 
     # Apply Louvain community detection algorithm
     partition = community_louvain.best_partition(G, weight="weight")
+
+    # Calculate modularity
+    modularity = community_louvain.modularity(partition, G, weight="weight")
+    print(f"Modularity for {title}: {modularity:.4f}")
 
     # Extract the unique communities detected
     communities = {}
@@ -94,6 +100,7 @@ team_files_titles = [
     ),
 ]
 
-# Detect and display communities for each team
+# Detect and display communities and modularity for each team
 for team_file, title in team_files_titles:
-    detect_communities(team_file, title)
+    detect_communities_with_modularity(team_file, title)
+
