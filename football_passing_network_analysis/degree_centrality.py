@@ -3,8 +3,9 @@ import networkx as nx
 
 '''
  -> Degree centrality
- -> Basically density for each individual node 
-  -> (in-degree, out-degree, total degree)
+    -> Basically density for each individual node 
+    -> (in-degree, out-degree, total degree)
+    -> weights are NOT from cost_function
 '''
 
 
