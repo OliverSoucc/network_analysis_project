@@ -3,6 +3,8 @@ import networkx as nx
 
 '''
     -> Average CC (weighted)
+        -> average over all nodes, how likely they create triangles with their neighbours
+        -> weights are NOT from cost_function
 '''
 
 # Define a function to calculate clustering coefficients for each team

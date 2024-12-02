@@ -8,13 +8,12 @@ from cost_function_weight import (
     calculate_custom_cost,
 )
 
+'''
+    -> tu by mali byt values pre kazdeho hraca medzi [0, 1] (normalizovane), a nie som si uplne isty preco nie su
+    -> dat tomu 10 minut, ak sa nepodari fixnut, vymazat -> mame toho dost
+'''
 
-"""
- -> Node Betweenness Centrality
- -> identify and visualize players who act as key playmakers in the passing network
-"""
-
-def calculate_betweenness_centrality(team_file, title, optimized_weights):
+def calculate_closeness_centrality(team_file, title, optimized_weights):
     # Load the team's passing data
     team_df = pd.read_csv(team_file)
 
@@ -43,20 +42,31 @@ def calculate_betweenness_centrality(team_file, title, optimized_weights):
         weights=optimized_weights
     )
 
+    # Normalize custom weights
+    min_weight = pass_df['Custom Weight'].min()
+    max_weight = pass_df['Custom Weight'].max()
+    pass_df['Custom Weight'] = (pass_df['Custom Weight'] - min_weight) / (max_weight - min_weight) if max_weight > min_weight else pass_df['Custom Weight']
+
     # Build a directed graph with custom weights
     G = nx.DiGraph()
     for _, row in pass_df.iterrows():
-        G.add_edge(row['From'], row['To'], weight=row['Custom Weight'])
+        if row['From'] != row['To']:  # Exclude self-loops
+            G.add_edge(row['From'], row['To'], weight=row['Custom Weight'])
 
-    # Calculate betweenness centrality
-    betweenness_centrality = nx.betweenness_centrality(G, weight='weight', normalized=True)
+    # Check connectivity
+    if not nx.is_weakly_connected(G):
+        print(f"Warning: The graph for {title} is not fully connected. Results may be inaccurate.")
+
+    # Calculate closeness centrality
+    closeness_centrality = nx.closeness_centrality(G, distance='weight')
 
     # Display results
-    print(f"Betweenness Centrality for {title}:")
-    for player, centrality in sorted(betweenness_centrality.items(), key=lambda x: x[1], reverse=True):
+    print(f"Closeness Centrality for {title}:")
+    for player, centrality in sorted(closeness_centrality.items(), key=lambda x: x[1], reverse=True):
         print(f"  {player}: {centrality:.4f}")
 
-    return betweenness_centrality
+    return closeness_centrality
+
 
 # Paths to team files and corresponding titles
 team_files_titles = [
@@ -66,8 +76,8 @@ team_files_titles = [
     ('../data/filtered_data/teams/Sample_Game_2_Away_filtered.csv', "Game 2 - Away Team")
 ]
 
-# Perform betweenness centrality analysis for each team
+# Perform closeness centrality analysis for each team
+
 for team_file, title in team_files_titles:
     optimized_weights = optimize_custom_cost(team_file, title)
-    calculate_betweenness_centrality(team_file, title, optimized_weights)
-
+    calculate_closeness_centrality(team_file, title, optimized_weights)
