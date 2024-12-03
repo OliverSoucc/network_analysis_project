@@ -3,7 +3,7 @@ import networkx as nx
 
 
 '''
- -> Average player degree for each team 
+ -> Average player degree for each team
 '''
 
 # Define a function to calculate the average degree for each team
