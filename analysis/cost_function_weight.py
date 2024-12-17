@@ -1,5 +1,4 @@
 import pandas as pd
-import math
 import numpy as np
 
 
@@ -9,11 +8,7 @@ import numpy as np
         -> success rate of passing of player
         -> pass frequency, how many times he exchange the ball with every other teammate (this is what where were using previously alone and still using in files where "weights NOT from cost_function")
 '''
-# Calculate Euclidean distance between Start and End points
-def calculate_pass_distance(row):
-    return math.sqrt((row['End X'] - row['Start X'])**2 + (row['End Y'] - row['Start Y'])**2)
 
-# Calculate success rate for each player
 def calculate_pass_success_rate(team_df):
     # Filter relevant rows (PASS, BALL LOST, BALL OUT)
     filtered_df = team_df[team_df['Type'].isin(['PASS', 'BALL LOST', 'BALL OUT'])]
@@ -34,10 +29,6 @@ def calculate_pass_frequency(pass_df):
     pass_frequency = pass_df.groupby(['From', 'To']).size()
     return pass_frequency.to_dict()
 
-''''''''''''''''''
-
-
-
 
 '''
     -> calculating cost function
@@ -51,7 +42,6 @@ def calculate_custom_cost(row, max_distance, success_rate, pass_frequency, weigh
     normalized_success = 1 - success_rate.get(row['From'], 0)
     return w1 * normalized_distance + w2 * normalized_frequency + w3 * normalized_success
 
-# Total cost function
 def total_cost(weights, pass_df, max_distance, success_rate, pass_frequency):
     return pass_df.apply(
         calculate_custom_cost,
@@ -87,9 +77,10 @@ def optimize_weights_with_gradient_descent(pass_df, max_distance, success_rate, 
     return weights
 
 # Example usage
-def optimize_custom_cost(team_file, title):
+def optimize_custom_cost(team_path: str):
+    from helper_functions import calculate_pass_distance
     # Load the team's passing data
-    team_df = pd.read_csv(team_file)
+    team_df = pd.read_csv(team_path)
 
     # Filter only rows where Type is 'PASS'
     pass_df = team_df[team_df['Type'] == 'PASS'].copy()
@@ -110,7 +101,5 @@ def optimize_custom_cost(team_file, title):
     optimized_weights = optimize_weights_with_gradient_descent(
         pass_df, max_distance, success_rate, pass_frequency, learning_rate=0.0001, iterations=100
     )
-
-    # print(f"Optimized Weights for {title}: w1={optimized_weights[0]:.4f}, w2={optimized_weights[1]:.4f}, w3={optimized_weights[2]:.4f}")
     return optimized_weights
 

@@ -1,15 +1,10 @@
-import pandas as pd
-import networkx as nx
+def calculate_team_edges(filepath: str):
+    import networkx as nx
+    from helper_functions import get_passes_df
 
-# Define a function to calculate the number of edges for each team
-def calculate_team_edges(team_file):
-    # Load the passing dataset
-    team_df = pd.read_csv(team_file)
+    pass_df = get_passes_df(filepath)
+    assert pass_df != -1
 
-    # Filter only rows where Type is 'PASS' and drop rows with missing values
-    pass_df = team_df[(team_df['Type'] == 'PASS') & team_df['From'].notna() & team_df['To'].notna()]
-
-    # Get the unique teams
     teams = pass_df['Team'].unique()
 
     # Initialize a dictionary to store the number of edges for each team
@@ -34,16 +29,12 @@ def calculate_team_edges(team_file):
     return team_edges
 
 
-team_files = [
-    ('../data/filtered_data/teams/Sample_Game_1_Home_filtered.csv', "Game 1 - Home Team"),
-    ('../data/filtered_data/teams/Sample_Game_1_Away_filtered.csv', "Game 1 - Away Team"),
-    ('../data/filtered_data/teams/Sample_Game_2_Home_filtered.csv', "Game 2 - Home Team"),
-    ('../data/filtered_data/teams/Sample_Game_2_Away_filtered.csv', "Game 2 - Away Team")
-]
-
-# Loop through each file and calculate edges
-for file_path, team in team_files:
-    team_edges = calculate_team_edges(file_path)
-    print(f"{team}: {team_edges} edges")
+# TODO: Return the values in dictionary {"team": no edges}
+def display_no_edges() -> None:
+    from constants import TEAMS
+    # Loop through each file and calculate edges
+    for file_path, team in TEAMS:
+        team_edges = calculate_team_edges(file_path)
+        print(f"{team}: {team_edges} edges")
 
 

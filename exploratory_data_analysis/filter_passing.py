@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 
-
+# Todo: Delete this file?
 """
  -> filter games and keep only passing -> valid_types
 """

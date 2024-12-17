@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-
 '''
     -> Heat map
     -> based on start of pass
@@ -59,16 +58,11 @@ def passing_heatmap_seaborn(team_file, title):
     plt.ylabel("Pitch Width (meters)")
     plt.show()
 
-# Paths to team files for each game and titles for each result
-team_files_titles = [
-    ('../data/filtered_data/teams/Sample_Game_1_Home_filtered.csv', "Game 1 - Home Team"),
-    ('../data/filtered_data/teams/Sample_Game_1_Away_filtered.csv', "Game 1 - Away Team"),
-    ('../data/filtered_data/teams/Sample_Game_2_Home_filtered.csv', "Game 2 - Home Team"),
-    ('../data/filtered_data/teams/Sample_Game_2_Away_filtered.csv', "Game 2 - Away Team")
-]
 
-for team_file, title in team_files_titles:
-    passing_heatmap_seaborn(team_file, title)
+def display_heat_map():
+    from constants import TEAMS
+    for team_file, title in TEAMS:
+        passing_heatmap_seaborn(team_file, title)
 
 
 

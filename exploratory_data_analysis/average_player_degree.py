@@ -1,20 +1,10 @@
-import pandas as pd
-import networkx as nx
+def calculate_average_degree(filepath: str):
+    import networkx as nx
+    from helper_functions import get_passes_df
 
+    pass_df = get_passes_df(filepath)
+    assert pass_df != -1
 
-'''
- -> Average player degree for each team
-'''
-
-# Define a function to calculate the average degree for each team
-def calculate_average_degree(team_file):
-    # Load the passing dataset
-    team_df = pd.read_csv(team_file)
-
-    # Filter only rows where Type is 'PASS' and drop rows with missing values
-    pass_df = team_df[(team_df['Type'] == 'PASS') & team_df['From'].notna() & team_df['To'].notna()]
-
-    # Get the unique teams
     teams = pass_df['Team'].unique()
 
     # Initialize a dictionary to store the average degree for each team
@@ -43,16 +33,9 @@ def calculate_average_degree(team_file):
 
     return team_avg_degrees
 
-
-# Array of file paths
-team_files = [
-    ('../data/filtered_data/teams/Sample_Game_1_Home_filtered.csv', "Game 1 - Home Team"),
-    ('../data/filtered_data/teams/Sample_Game_1_Away_filtered.csv', "Game 1 - Away Team"),
-    ('../data/filtered_data/teams/Sample_Game_2_Home_filtered.csv', "Game 2 - Home Team"),
-    ('../data/filtered_data/teams/Sample_Game_2_Away_filtered.csv', "Game 2 - Away Team")
-]
-
-# Loop through each file and calculate average degree
-for file_path, team in team_files:
-    team_avg_degrees = calculate_average_degree(file_path)
-    print(f"Team {team}: Average Degree = {team_avg_degrees}")
+def display_average_degree():
+    from constants import TEAMS
+    # Loop through each file and calculate average degree
+    for file_path, team in TEAMS:
+        team_avg_degrees = calculate_average_degree(file_path)
+        print(f"Team {team}: Average Degree = {team_avg_degrees}")
