@@ -8,15 +8,12 @@ def calculate_average_degree(filepath: str):
         raise Exception("Error")
 
     teams = pass_df['Team'].unique()
-
-    # Initialize a dictionary to store the average degree for each team
     team_avg_degrees = {}
 
     # Calculate the average degree for each team
     for team in teams:
         team_passes = pass_df[pass_df['Team'] == team]
 
-        # Create a directed graph
         G = nx.DiGraph()
 
         # Add edges (passes) to the graph

@@ -3,7 +3,6 @@ from analysis.degree_centrality import display_degree_centrality
 from analysis.closeness_centrality import display_closeness_centrality
 from analysis.betweenness_centrality import display_betweenness
 from analysis.clustering_coefficient import display_clustering_coefficient
-
 from exploratory_data_analysis.density import display_density
 from exploratory_data_analysis.heat_map import display_heat_map
 from exploratory_data_analysis.passing_graph import display_passing_graph
@@ -19,9 +18,9 @@ if __name__ == "__main__":
     # display_clustering_coefficient()
     # display_density()
     # display_heat_map()
-    # display_passing_graph()
+    display_passing_graph()
     # display_no_edges()
     # display_degree_distribution()
-    display_average_degree()
+    # display_average_degree()
 
 
