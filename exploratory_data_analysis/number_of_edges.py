@@ -3,7 +3,9 @@ def calculate_team_edges(filepath: str):
     from helper_functions import get_passes_df
 
     pass_df = get_passes_df(filepath)
-    assert pass_df != -1
+
+    if isinstance(pass_df, int) and pass_df == -1:
+        raise Exception("Error")
 
     teams = pass_df['Team'].unique()
 

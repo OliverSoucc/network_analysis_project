@@ -12,15 +12,14 @@ def calculate_betweenness_centrality(path: str, title: str, optimized_weights):
     )
 
     pass_df = get_passes_df(path)
-    assert pass_df != -1
+
+    if isinstance(pass_df, int) and pass_df == -1:
+        raise Exception("Error")
 
     # Calculate distance for each pass
     pass_df["Distance"] = pass_df.apply(calculate_pass_distance, axis=1)
 
-    # Calculate success rate for each player
     success_rate = calculate_pass_success_rate(pd.read_csv(path))
-
-    # Calculate frequency of passes between players
     pass_frequency = calculate_pass_frequency(pass_df)
 
     # Normalize distance feature
@@ -36,15 +35,12 @@ def calculate_betweenness_centrality(path: str, title: str, optimized_weights):
         weights=optimized_weights,
     )
 
-    # Build a directed graph with custom weights
     G = build_graph(pass_df, mode='c', graph=nx.DiGraph())
 
-    # Calculate betweenness centrality
     betweenness_centrality = nx.betweenness_centrality(
         G, weight="weight", normalized=True
     )
 
-    # Display results
     print(f"Betweenness Centrality for {title}:")
     for player, centrality in sorted(
         betweenness_centrality.items(), key=lambda x: x[1], reverse=True

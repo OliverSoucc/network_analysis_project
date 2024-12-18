@@ -1,5 +1,3 @@
-import networkx as nx
-
 # Define a function to calculate clustering coefficients for each team
 def calculate_weighted_clustering_coefficients(path: str, title: str):
     '''
@@ -8,9 +6,12 @@ def calculate_weighted_clustering_coefficients(path: str, title: str):
             -> weights are NOT from cost_function
     '''
     from helper_functions import build_graph, get_passes_df
+    import networkx as nx
 
     pass_df = get_passes_df(path)
-    assert pass_df != -1
+
+    if isinstance(pass_df, int) and pass_df == -1:
+        raise Exception('Error')
 
     # Get the unique teams
     teams = pass_df['Team'].unique()

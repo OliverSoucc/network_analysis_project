@@ -1,6 +1,6 @@
 import pandas as pd
 import networkx as nx
-from cost_function_weight import (
+from analysis.cost_function_weight import (
     optimize_custom_cost,
     calculate_pass_success_rate,
     calculate_pass_frequency,
@@ -16,7 +16,8 @@ def calculate_closeness_centrality(path: str, title: str, optimized_weights):
     '''
     pass_df = get_passes_df(path)
 
-    assert pass_df != -1
+    if isinstance(pass_df, int) and pass_df == -1:
+        raise Exception("Error")
 
     pass_df['Distance'] = pass_df.apply(calculate_pass_distance, axis=1)
 

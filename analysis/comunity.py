@@ -13,7 +13,10 @@ def detect_communities_with_modularity(filepath: str, title):
     from helper_functions import build_graph, get_passes_df
 
     pass_df = get_passes_df(filepath)
-    assert pass_df != -1
+
+    if isinstance(pass_df, int) and pass_df == -1:
+        raise Exception("Error")
+
     G = build_graph(pass_df, mode='p', graph=nx.Graph())
 
     # Apply Louvain community detection algorithm
