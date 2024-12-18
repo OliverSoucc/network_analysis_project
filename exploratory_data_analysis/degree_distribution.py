@@ -1,30 +1,24 @@
-import pandas as pd
-import networkx as nx
-import matplotlib.pyplot as plt
-import numpy as np
+def degree_distribution_plot_unweighted(filepath: str, title: str):
+    '''
+    Graph nodes vs edges
+    '''
+    import networkx as nx
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from helper_functions import get_passes_df
 
-'''
- -> Graph nodes vs edges
-'''
+    pass_df = get_passes_df(filepath)
 
-# Define a function to create an unweighted degree distribution plot
-def degree_distribution_plot_unweighted(team_file, title):
-    # Load the passing dataset
-    team_df = pd.read_csv(team_file)
+    if isinstance(pass_df, int) and pass_df == -1:
+        raise Exception("Error")
 
-    # Filter only rows where Type is 'PASS' and drop rows with missing values
-    pass_df = team_df[(team_df['Type'] == 'PASS') & team_df['From'].notna() & team_df['To'].notna()]
-
-    # Get the unique teams
     teams = pass_df['Team'].unique()
 
     for team in teams:
         team_passes = pass_df[pass_df['Team'] == team]
 
-        # Create a directed graph (without weights)
         G = nx.DiGraph()
 
-        # Add edges (passes) to the graph
         for _, row in team_passes.iterrows():
             from_player = row['From']
             to_player = row['To']
@@ -43,16 +37,10 @@ def degree_distribution_plot_unweighted(team_file, title):
         plt.grid()
         plt.show()
 
-# Array of file paths and corresponding titles
-team_files_titles = [
-    ('../data/filtered_data/teams/Sample_Game_1_Home_filtered.csv', "Game 1 - Home Team"),
-    ('../data/filtered_data/teams/Sample_Game_1_Away_filtered.csv', "Game 1 - Away Team"),
-    ('../data/filtered_data/teams/Sample_Game_2_Home_filtered.csv', "Game 2 - Home Team"),
-    ('../data/filtered_data/teams/Sample_Game_2_Away_filtered.csv', "Game 2 - Away Team")
-]
+def display_degree_distribution():
+    from constants import TEAMS
 
-# Create degree distribution plots for each team
-for team_file, title in team_files_titles:
-    degree_distribution_plot_unweighted(team_file, title)
+    for team_file, title in TEAMS:
+        degree_distribution_plot_unweighted(team_file, title)
 
 
